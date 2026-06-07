@@ -14,7 +14,10 @@ st.set_page_config(
     initial_sidebar_state="collapsed",
 )
 
-DATA_DIR = os.path.join(os.path.dirname(__file__), "data")
+APP_DIR = os.path.dirname(__file__)
+DATA_DIR = os.path.join(APP_DIR, "data")
+if not os.path.exists(os.path.join(DATA_DIR, "master_long.csv")):
+    DATA_DIR = APP_DIR
 
 PERIODS = [
     (1850, 1913, "1850–1913", "Industrialization and empire"),
@@ -78,17 +81,26 @@ st.markdown("""
         margin:-1rem -1rem 0 -1rem;
     }
     .top-nav {
-        background: linear-gradient(180deg, rgba(93,70,0,.96), rgba(64,47,0,.96));
-        padding: .25rem 1.2rem .4rem 1.2rem; margin:0 -1rem 0 -1rem;
+        background: linear-gradient(180deg, rgba(93,70,0,.96), rgba(64,47,0,.98));
+        padding: 0; margin:0 -1rem 0 -1rem;
         border-bottom:1px solid rgba(255,255,255,.12);
     }
-    div[data-testid="stRadio"] > div {gap: 1.1rem;}
-    div[data-testid="stRadio"] label {
-        background: transparent !important; border: 0 !important; padding: .35rem .2rem !important;
-        color: #fdf7df !important; font-weight: 700; font-size: 1.02rem;
+    div[data-testid="stRadio"] {
+        background: linear-gradient(180deg, rgba(93,70,0,.96), rgba(64,47,0,.98));
+        padding: .35rem 1.4rem .45rem 1.4rem;
+        margin: 0 -1rem 1rem -1rem;
+        border-top: 1px solid rgba(255,255,255,.10);
+        border-bottom: 1px solid rgba(0,0,0,.15);
     }
-    div[data-testid="stRadio"] label p {color:#fdf7df !important; font-size:1.02rem !important;}
+    div[data-testid="stRadio"] > div {gap: 1.35rem;}
+    div[data-testid="stRadio"] label {
+        background: transparent !important; border: 0 !important; padding: .35rem .25rem !important;
+        color: #fff6d7 !important; font-weight: 800; font-size: 1.05rem;
+    }
+    div[data-testid="stRadio"] label p {color:#fff6d7 !important; font-size:1.05rem !important;}
+    div[data-testid="stRadio"] label:hover p {color:#ffffff !important;}
     div[data-testid="stRadio"] label[data-baseweb="radio"] > div:first-child {display:none;}
+    p, li {font-size: 1.03rem; line-height: 1.68;}
     .hero {
         border-radius: 0px 0px 18px 18px;
         padding: 5.5rem 3rem 4.8rem 3rem;
@@ -272,10 +284,17 @@ elif page == "Data":
         st.download_button("Download selected data as CSV", df[show_cols].to_csv(index=False).encode("utf-8"), "selected_decoupling_data.csv", "text/csv")
 
 elif page == "Correlation":
-    hero("Correlation Explorer", "Test how growth, population, urbanization, fossil carbon, and CO₂ moved together historically.")
+    hero("Correlation Explorer", "Explore how growth, population, urbanization, fossil carbon, and CO₂ moved together historically.")
+    st.markdown("""
+    **What this page shows**
+
+    This page is not meant to prove a final answer by itself. It is a place to visually inspect whether two historical variables moved together. For example, if GDP per capita and CO₂ emissions rise together, that suggests a strong coupling between economic growth and carbon emissions. If the trend becomes flatter in later periods, that may suggest that the relationship weakened over time.
+
+    Correlation should be read carefully. A high correlation does not mean that one variable directly caused the other. In this project, correlation is used as a starting point for historical interpretation. The main question is not simply whether two numbers are related, but what kind of historical system made them move together.
+    """)
     c1,c2,c3,c4 = st.columns([1.2,1.2,1,1])
     with c1:
-        x_label = st.selectbox("X variable", list(VARIABLES.keys()), index=list(VARIABLES.keys()).index("GDP per capita (2011 int'l $" ) if "GDP per capita (2011 int'l $" in VARIABLES else 1)
+        x_label = st.selectbox("X variable", list(VARIABLES.keys()), index=list(VARIABLES.keys()).index("GDP per capita (2011 int'l $") if "GDP per capita (2011 int'l $" in VARIABLES else 1)
     with c2:
         y_label = st.selectbox("Y variable", list(VARIABLES.keys()), index=list(VARIABLES.keys()).index("CO₂ emissions (tonnes)"))
     with c3:
@@ -298,18 +317,19 @@ elif page == "Correlation":
             fig.update_yaxes(type="log")
         fig.update_layout(height=650, legend_title_text="Period")
         st.plotly_chart(fig, use_container_width=True)
-        st.markdown("""
-        **How to read this:** a steeper trendline means growth and emissions are more tightly coupled. A flatter trendline suggests a weaker relationship. This is not causal proof; it is a way to visualize historical association.
-        """)
         corr = d[[x_col,y_col]].corr().iloc[0,1]
-        st.metric("Pearson correlation in selected sample", f"{corr:.3f}")
+        st.markdown(f"""
+        **How to read this graph**
 
-    st.markdown("## Recommended relationship checks")
+        Each dot represents an observation in the dataset. The trendline summarizes the overall direction of the relationship. If the line is steep, the two variables are moving together strongly. If it is flatter, the relationship is weaker. In this project, this matters because decoupling means that economic growth and CO₂ emissions become less tightly connected over time.
+
+        For the current selection, the Pearson correlation is **{corr:.3f}**. A value close to 1 means that the two variables move together strongly, while a value closer to 0 means that the relationship is weaker. This number is useful as a descriptive signal, but it should not be treated as causal proof.
+        """)
+
     st.markdown("""
-    - **GDP per capita ↔ CO₂ emissions:** the main growth–carbon relationship.
-    - **Fossil CO₂ ↔ CO₂ emissions:** whether fossil carbon is the direct mechanism behind emissions.
-    - **Urbanization ↔ CO₂ per capita:** urbanization as a supporting historical variable.
-    - **GDP growth ↔ CO₂ growth:** useful later for classifying absolute and relative decoupling.
+    **Recommended checks**
+
+    The most important relationship to examine is GDP per capita and CO₂ emissions, because this directly addresses the question of whether economic growth remained tied to carbon emissions. A second important relationship is fossil CO₂ and total CO₂ emissions, because it shows whether fossil carbon use is the mechanism behind emissions. Urbanization and population are supporting variables. They help explain the broader historical setting, but they are not the main definition of decoupling.
     """)
 
 elif page == "Regression":
@@ -397,36 +417,23 @@ elif page == "Timeline":
     st.markdown("The event markers are not explanations by themselves. They are prompts for historical interpretation: did the pattern bend before, during, or after the event?")
 
 elif page == "Conclusion":
-    hero("Conclusion", "What the project is trying to prove.")
+    hero("Conclusion", "The final interpretation of the project.")
     st.markdown("""
-    ## Core conclusion
+    **Core conclusion**
 
-    The main conclusion of this project is that **decoupling was not automatic, universal, or complete**.
+    The central argument of this project is that decoupling was not an automatic, universal, or complete result of modernization. Economic growth and CO₂ emissions were historically coupled because modern industrial growth depended heavily on fossil-carbon energy systems. In other words, GDP did not rise in isolation. It rose through coal, oil, gas, mass production, expanding transport systems, urbanization, and energy-intensive consumption. Before asking when growth and carbon began to separate, this project first shows that they were historically connected in the first place.
 
-    Economic growth and CO₂ emissions were historically coupled because modern industrial growth depended heavily on fossil-carbon energy systems. If the relationship weakens in some periods, that weakening should not be read as a simple success story. It must be interpreted historically: through the oil shocks, energy efficiency, industrial restructuring, climate policy, and the changing geography of production.
+    **What the project argues**
 
-    ## What this project argues
+    This project argues that the weakening relationship between growth and carbon emissions should be understood as a historical process rather than a simple policy indicator. If carbon intensity declines, that means the economy is producing less CO₂ per unit of GDP. This can be an early sign of relative decoupling. However, it does not automatically mean that total emissions are falling. A country or the world economy can become less carbon-intensive while still emitting more CO₂ in total. For that reason, the project distinguishes between relative decoupling and absolute decoupling. Absolute decoupling is the stricter case: GDP continues to rise while total CO₂ emissions fall.
 
-    1. **Before decoupling, there was coupling.**  
-       Industrial growth, population growth, urbanization, and fossil-carbon use pushed CO₂ emissions upward together.
+    The project also argues that fossil carbon is the key mechanism connecting growth and emissions. GDP itself does not emit carbon. Growth becomes carbon-intensive when it depends on fossil fuels and fossil-based energy systems. This is why fossil carbon usage is important in the analysis. If the relationship between GDP and CO₂ weakens after fossil carbon is considered, that suggests that the deeper historical issue is not growth in the abstract, but the fossil-energy structure through which growth was produced.
 
-    2. **Carbon intensity is the first sign of weakening.**  
-       If CO₂/GDP declines, the economy is becoming less carbon-intensive. But this is only **relative decoupling**; total emissions can still rise.
+    The historical timeline matters because the growth-carbon relationship did not change in a vacuum. The postwar Great Acceleration intensified the connection between mass economic growth and fossil energy. The oil shocks of the 1970s exposed the vulnerability of cheap fossil-fuel dependence and encouraged energy efficiency and restructuring in some economies. Later, climate agreements and global supply chains changed how emissions were measured, governed, and sometimes displaced. These events do not explain everything by themselves, but they provide turning points through which the data can be interpreted historically.
 
-    3. **Absolute decoupling is a stricter test.**  
-       True absolute decoupling requires GDP to rise while total CO₂ emissions fall. This is harder and less universal.
+    **Final interpretation**
 
-    4. **Fossil carbon is the mechanism.**  
-       GDP does not emit carbon by itself. Growth becomes carbon-intensive when it depends on coal, oil, gas, and fossil-based energy systems.
-
-    5. **Historical events matter.**  
-       The 1970s oil shocks, postwar growth, globalization, and climate agreements are not just background events. They are possible turning points that help explain why the growth–carbon relationship changed.
-
-    ## Final interpretation
-
-    Decoupling should be understood as a fragile historical process, not as the natural endpoint of modernization. It emerged unevenly under specific historical conditions: fossil-fuel dependence, energy crisis, policy response, industrial restructuring, and global economic change.
-
-    In short: **the question is not simply whether GDP grew while CO₂ declined. The deeper historical question is how growth itself was reorganized away from, or still remained dependent on, fossil carbon.**
+    The deeper conclusion is that decoupling should not be treated as the natural endpoint of economic development. It is better understood as a fragile and uneven historical process shaped by fossil-fuel dependence, energy crises, policy choices, industrial restructuring, and global economic change. The question is therefore not only whether GDP grew while CO₂ declined. The more important historical question is how growth itself was reorganized away from fossil carbon, or why it remained dependent on it.
     """)
 
 elif page == "Sources & Method":
