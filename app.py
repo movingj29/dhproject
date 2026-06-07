@@ -81,21 +81,40 @@ st.markdown("""
         margin:-1rem -1rem 0 -1rem;
     }
     .top-nav {
-        background: linear-gradient(180deg, rgba(93,70,0,.96), rgba(64,47,0,.98));
-        padding: 0; margin:0 -1rem 0 -1rem;
-        border-bottom:1px solid rgba(255,255,255,.12);
+        background: linear-gradient(180deg, rgba(93,70,0,.98), rgba(64,47,0,.98));
+        padding: 0;
+        margin: 0 0 1rem 0;
+        border-bottom: 1px solid rgba(255,255,255,.12);
+        width: 100%;
+        box-sizing: border-box;
     }
     div[data-testid="stRadio"] {
-        background: linear-gradient(180deg, rgba(93,70,0,.96), rgba(64,47,0,.98));
-        padding: .35rem 1.4rem .45rem 1.4rem;
-        margin: 0 -1rem 1rem -1rem;
+        background: linear-gradient(180deg, rgba(93,70,0,.98), rgba(64,47,0,.98));
+        padding: .45rem 1.4rem .55rem 1.4rem;
+        margin: 0 0 1.4rem 0;
         border-top: 1px solid rgba(255,255,255,.10);
-        border-bottom: 1px solid rgba(0,0,0,.15);
+        border-bottom: 1px solid rgba(0,0,0,.18);
+        width: 100% !important;
+        box-sizing: border-box;
+        border-radius: 0;
     }
-    div[data-testid="stRadio"] > div {gap: 1.35rem;}
+    div[data-testid="stRadio"] > div,
+    div[data-testid="stRadio"] div[role="radiogroup"] {
+        width: 100% !important;
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+        gap: 1.2rem !important;
+        flex-wrap: nowrap !important;
+    }
     div[data-testid="stRadio"] label {
-        background: transparent !important; border: 0 !important; padding: .35rem .25rem !important;
-        color: #fff6d7 !important; font-weight: 800; font-size: 1.05rem;
+        background: transparent !important;
+        border: 0 !important;
+        padding: .35rem .25rem !important;
+        color: #fff6d7 !important;
+        font-weight: 800;
+        font-size: 1.05rem;
+        white-space: nowrap !important;
     }
     div[data-testid="stRadio"] label p {color:#fff6d7 !important; font-size:1.05rem !important;}
     div[data-testid="stRadio"] label:hover p {color:#ffffff !important;}
@@ -138,7 +157,6 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # Top navigation, inspired by public data-hub sites
-st.markdown('<div class="top-news">🔔 View project updates and historical turning points</div>', unsafe_allow_html=True)
 st.markdown('<div class="top-nav">', unsafe_allow_html=True)
 page = st.radio(
     "Navigation",
@@ -437,7 +455,7 @@ elif page == "Conclusion":
     """)
 
 elif page == "Sources & Method":
-    hero("Sources & Method", "Data provenance, limitations, and methodological cautions.")
+    hero("Sources & Method", "Data sources used in this project.")
     st.markdown("""
     ## Data sources
 
@@ -445,13 +463,4 @@ elif page == "Sources & Method":
     - **Our World in Data CO₂ dataset**: annual CO₂ emissions by country/entity.
     - **Global Carbon Budget 2025**: territorial and consumption-based fossil carbon emissions.
     - **UN World Urbanization Prospects**: urbanization and population estimates.
-    - **J. R. McNeill, *Something New Under the Sun***: historical framing of twentieth-century environmental change.
-
-    ## Methodological cautions
-
-    - Nineteenth-century GDP and population figures are historical estimates, not modern national statistical measurements.
-    - OLS regression is used as an exploratory historical tool, not as proof of direct causation.
-    - CO₂, GDP, population, and fossil energy are highly trended over time, so the findings must be interpreted as long-run patterns rather than precise causal estimates.
-    - Carbon intensity can decline even while total emissions rise. This project therefore distinguishes relative decoupling from absolute decoupling.
-    - Production-based and consumption-based emissions may tell different stories about carbon outsourcing.
     """)
