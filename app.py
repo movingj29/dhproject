@@ -254,12 +254,8 @@ if page == "Home":
     d.metric("CO₂ observations", f"{master['co2_tonnes'].notna().sum():,}")
 
 elif page == "About":
-    hero("About the Project", "Book, question, method, and historical argument.")
+    hero("About the Project", "Question, method, and historical argument.")
     st.markdown("""
-    ## Book selection
-    I selected **J. R. McNeill's *Something New Under the Sun*** after choosing my project topic.
-    The book explains how twentieth-century industrialization, economic growth, fossil fuel use, air pollution, and global environmental change were closely connected.
-    It provides the historical background for asking when and why that connection began to weaken.
 
     ## Main historical question
     **When, where, and why did economic growth begin to decouple from carbon emissions?**
