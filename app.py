@@ -454,8 +454,8 @@ elif page == "Conclusion":
     The deeper conclusion is that decoupling should not be treated as the natural endpoint of economic development. It is better understood as a fragile and uneven historical process shaped by fossil-fuel dependence, energy crises, policy choices, industrial restructuring, and global economic change. The question is therefore not only whether GDP grew while CO₂ declined. The more important historical question is how growth itself was reorganized away from fossil carbon, or why it remained dependent on it.
     """)
 
-elif page == "Sources":
-    hero("Sources", "Data sources used in this project.")
+elif page == "Sources & Method":
+    hero("Sources & Method", "Data sources used in this project.")
     st.markdown("""
     ## Data sources
 
