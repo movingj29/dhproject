@@ -527,4 +527,12 @@ elif page == "Sources & Method":
     - **Global Carbon Budget 2025**: territorial and consumption-based fossil carbon emissions.
     - **UN World Urbanization Prospects**: urbanization and population estimates.
 
+    ## Method note
 
+    The datasets were cleaned and reorganized into country-year and year-level formats. Derived variables such as total GDP, CO₂ per capita, carbon intensity, and fossil intensity were calculated to examine the changing relationship between economic output and emissions.
+
+    **Correlation** is used to visually inspect whether two variables moved together. **OLS regression** is used to compare the strength of the relationship between GDP per capita and CO₂ emissions across historical periods. These methods are exploratory. They help identify patterns, but they do not prove direct causation. The project therefore interprets statistical patterns together with historical context.
+
+    **Relative decoupling** means emissions grow more slowly than GDP or carbon intensity declines. **Absolute decoupling** means GDP grows while total emissions decline. This distinction is important because an economy can become more efficient while still emitting more carbon overall.
+
+  
