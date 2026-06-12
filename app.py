@@ -254,21 +254,49 @@ if page == "Home":
     d.metric("CO₂ observations", f"{master['co2_tonnes'].notna().sum():,}")
 
 elif page == "About":
-    hero("About the Project", "Question, method, and historical argument.")
+    hero("About the Project", "Book, question, method, and historical argument.")
     st.markdown("""
+    ## Book selection
+    I selected **J. R. McNeill's *Something New Under the Sun*** after choosing my project topic.
+    The book explains how twentieth-century industrialization, economic growth, fossil fuel use, air pollution, and global environmental change were closely connected. It provides the historical background for asking when and why that connection began to weaken.
 
     ## Main historical question
     **When, where, and why did economic growth begin to decouple from carbon emissions?**
+
+    This project does not treat decoupling only as a present-day climate policy term. It treats decoupling as a historical question. For much of modern industrial history, economic growth was supported by coal, oil, gas, mass production, expanding transportation, and urbanization. The project asks when this tight relationship between growth and carbon emissions began to weaken, and what historical conditions made that weakening possible.
+
+    ## Key concepts
+    **Decoupling** means a weakening of the relationship between economic growth and carbon emissions. If an economy grows but its emissions grow more slowly, this is called **relative decoupling**. If an economy grows while total emissions actually decline, this is called **absolute decoupling**. Absolute decoupling is the stronger and more difficult case.
+
+    **Carbon intensity** means CO₂ emissions divided by GDP. It tells us how much carbon is emitted to produce one unit of economic output. If carbon intensity falls, the economy is becoming less carbon-intensive. However, this does not automatically mean that total emissions are falling, because GDP can grow faster than carbon intensity declines.
+
+    **Fossil carbon dependence** means that economic growth relies on fossil-fuel-based energy systems. GDP itself does not directly produce carbon. Carbon emissions are produced when growth depends on coal, oil, gas, industrial production, transportation, electricity generation, and carbon-intensive consumption. This is why the project examines fossil carbon emissions as a mechanism connecting growth and CO₂.
 
     ## Working argument
     Decoupling should not be understood as the natural endpoint of modernization. It was a historically contingent process shaped by fossil-fuel dependence, the oil shocks, energy efficiency, industrial restructuring, climate governance, and global economic change.
 
     ## Method
     This project combines data visualization, correlation analysis, OLS regression, and historical timeline annotation. The goal is not to predict emissions, but to translate quantitative patterns into historical interpretation.
+
+    **Correlation** shows whether two variables moved together. For example, if GDP per capita and CO₂ emissions rise together, this suggests historical coupling. But correlation does not prove causation. It is only a starting point for interpretation.
+
+    **OLS regression** is used here as an exploratory historical method. The project focuses on the GDP per capita coefficient. A large positive coefficient suggests a strong relationship between growth and emissions. A smaller coefficient in a later period suggests that the relationship became weaker, which may indicate a movement toward decoupling. This does not prove that one event directly caused decoupling, so the regression results are interpreted together with historical context.
+
+    ## Why this is digital history
+    This project is a digital history project because it does not present historical interpretation only through a written essay. It uses cleaned historical datasets, interactive visualizations, regression results, and a web-based narrative structure to let users explore long-term historical patterns themselves. The digital format makes it possible to connect quantitative evidence with historical interpretation.
     """)
 
 elif page == "Data":
     hero("The Data Hub", "Explore the historical data used in this project by country, variable, and time period.")
+    st.markdown("""
+    ## What the variables mean
+
+    This page shows the basic historical materials used in the project. **GDP per capita** means average economic output per person. It is used here as a rough indicator of economic growth and living-standard change. **CO₂ emissions** measure the amount of carbon dioxide released into the atmosphere. **Population** matters because a larger population can raise total emissions even if emissions per person do not rise. **Urbanization** means the share of people living in urban areas, but it should be read carefully because the definition of “urban” differs across countries.
+
+    The most important derived variable is **carbon intensity**, which means CO₂ emissions divided by GDP. It measures how much CO₂ is emitted for each unit of economic output. If carbon intensity falls, an economy is becoming less carbon-intensive. However, falling carbon intensity does not always mean total CO₂ emissions are falling. This distinction is important because it separates **relative decoupling** from **absolute decoupling**.
+
+    **Fossil CO₂ emissions** are also important because they show the energy mechanism behind the project. GDP itself does not release carbon. Carbon is released when growth depends on coal, oil, gas, electricity generation, industrial production, transport, and fossil-fuel-based consumption.
+    """)
     st.markdown("### Select data")
     col1, col2, col3 = st.columns([1.2,1.5,1.2])
     with col1:
@@ -300,11 +328,15 @@ elif page == "Data":
 elif page == "Correlation":
     hero("Correlation Explorer", "Explore how growth, population, urbanization, fossil carbon, and CO₂ moved together historically.")
     st.markdown("""
-    **What this page shows**
+    ## What correlation means in this project
 
-    This page is not meant to prove a final answer by itself. It is a place to visually inspect whether two historical variables moved together. For example, if GDP per capita and CO₂ emissions rise together, that suggests a strong coupling between economic growth and carbon emissions. If the trend becomes flatter in later periods, that may suggest that the relationship weakened over time.
+    **Correlation** means that two variables tend to move together. If GDP per capita and CO₂ emissions increase together, the graph suggests a historical **coupling** between economic growth and carbon emissions. If the relationship becomes flatter or more scattered in later periods, it may suggest that the connection between growth and emissions became weaker.
 
-    Correlation should be read carefully. A high correlation does not mean that one variable directly caused the other. In this project, correlation is used as a starting point for historical interpretation. The main question is not simply whether two numbers are related, but what kind of historical system made them move together.
+    This page should not be read as causal proof. A high correlation does not mean that GDP itself directly caused CO₂ emissions. The historical question is deeper: what kind of economy, energy system, and industrial structure made growth and emissions move together? In this project, correlation is used as a first visual check before the regression and timeline sections provide more interpretation.
+
+    **How to read the scatter plot:** each dot is one country-year observation. The x-axis shows the variable selected on the left, and the y-axis shows the variable selected on the right. The trendline summarizes the general direction of the relationship. A steep upward trendline means the two variables are strongly associated. A flatter trendline means the relationship is weaker.
+
+    **Why log axes are useful:** many countries differ enormously in population, GDP, and emissions. A log scale compresses very large values and makes long-run relationships easier to see. It does not change the historical question; it simply makes the pattern more readable.
     """)
     c1,c2,c3,c4 = st.columns([1.2,1.2,1,1])
     with c1:
@@ -348,6 +380,17 @@ elif page == "Correlation":
 
 elif page == "Regression":
     hero("Regression Results", "Use OLS coefficients as historical evidence for how tightly growth and carbon were linked.")
+    st.markdown("""
+    ## What OLS regression means here
+
+    **OLS regression** stands for Ordinary Least Squares regression. In this project, it is not used to predict the future. It is used as an exploratory historical tool to ask how strongly economic growth and carbon emissions were connected in different periods.
+
+    The model compares CO₂ emissions with variables such as GDP per capita, population, urbanization, and fossil CO₂ emissions. The most important result is the **GDP per capita coefficient**. A coefficient is a number that shows how much the dependent variable tends to change when an explanatory variable changes, while the other variables in the model are held constant.
+
+    Because this project uses a log-log model, the coefficient can be read roughly as an elasticity. For example, if the GDP per capita coefficient is close to 1, then a 1% increase in GDP per capita is associated with about a 1% increase in CO₂ emissions, assuming the other variables in the model stay constant. A larger positive coefficient means stronger coupling between growth and emissions. A smaller coefficient in a later period means the relationship became weaker, which may suggest possible decoupling.
+
+    This still does not prove causation. A weaker coefficient does not automatically mean that a single event caused decoupling. It only shows that the statistical relationship changed. The historical interpretation comes from reading this change together with events such as the Great Acceleration, the oil shocks, climate governance, and globalization.
+    """)
     st.markdown("### Model")
     model_type = st.selectbox("Choose model", [
         "Basic: log(CO₂) ~ log(GDPpc) + log(Population)",
@@ -362,7 +405,13 @@ elif page == "Regression":
     else:
         x_cols = ["gdppc_2011_intl", "population_persons_est", "fossil_co2_tonnes_gcb"]
     st.latex(r"\log(CO_2) = \alpha + \beta_1 \log(GDPpc) + \beta_2 \log(Population) + \cdots + \epsilon")
-    st.markdown("The most important number is the **GDP per capita coefficient**. Higher values mean growth was more tightly associated with emissions.")
+    st.markdown("""
+    **Dependent variable:** CO₂ emissions. This is the outcome the model is trying to explain.
+
+    **Explanatory variables:** GDP per capita, population, and sometimes urbanization or fossil CO₂. These are used to examine what kinds of historical factors were associated with emissions.
+
+    **GDP per capita coefficient:** this is the key number for the project. Higher positive values mean growth was more tightly associated with emissions. Lower values in later periods suggest a weaker growth-carbon relationship.
+    """)
 
     results=[]
     for start,end,label,desc in PERIODS:
@@ -388,7 +437,13 @@ elif page == "Regression":
         fig.update_layout(height=520)
         st.plotly_chart(fig, use_container_width=True)
         st.markdown("""
-        **Interpretation:** If the coefficient falls after 1973, this supports the idea that the growth–carbon relationship weakened after the oil shocks. If it stays high, decoupling is weaker or incomplete.
+        **How to interpret this chart**
+
+        Each bar shows the GDP per capita coefficient for one historical period. The vertical error bars show uncertainty around the estimate. The main point is not the exact number alone, but whether the coefficient becomes weaker or stronger across historical periods.
+
+        If the coefficient is high during the postwar Great Acceleration, that suggests economic growth and emissions were tightly connected during the age of mass production and fossil energy expansion. If the coefficient becomes smaller after 1973, this supports the idea that the growth-carbon relationship weakened after the oil shocks, energy efficiency policies, and industrial restructuring. If it stays high, then decoupling is weak, incomplete, or limited to only some countries.
+
+        In this project, regression coefficients are treated as historical evidence for changing relationships, not as final causal proof.
         """)
         st.dataframe(res, use_container_width=True)
 
@@ -408,9 +463,21 @@ elif page == "Regression":
         st.dataframe(comp, use_container_width=True)
         fig=px.bar(comp, x="model", y="GDPpc coefficient", hover_data=["n","R²"], title="How GDPpc coefficient changes by model")
         st.plotly_chart(fig, use_container_width=True)
+        st.markdown("""
+        **Why compare models?**
+
+        The basic model shows the general relationship between GDP per capita, population, and CO₂ emissions. The urbanization model checks whether adding urbanization changes the result. The fossil mechanism model adds fossil CO₂ emissions to test whether fossil energy use explains much of the growth-emissions relationship. If the GDP coefficient changes after fossil CO₂ is added, this suggests that fossil energy systems are an important mechanism linking economic growth to emissions.
+        """)
 
 elif page == "Timeline":
     hero("Historical Timeline", "Major events that may have changed the relationship between growth, energy, and carbon emissions.")
+    st.markdown("""
+    ## Why a timeline is necessary
+
+    The graphs and regression results show patterns, but they do not explain history by themselves. This timeline connects those patterns to major historical events. The purpose is not to claim that each event directly caused a change in emissions. Instead, the timeline provides context for interpreting when the relationship between growth, fossil energy, and CO₂ may have changed.
+
+    The **Great Acceleration** refers to the rapid post-1945 expansion of industrial production, energy use, transportation, consumption, and environmental impact. The **oil shocks** of 1973 and 1979 disrupted the assumption of cheap fossil energy and pushed some economies toward efficiency and restructuring. Later climate agreements such as the Kyoto Protocol and Paris Agreement show the rise of international climate governance. China’s entry into the WTO is included because globalization can shift carbon-intensive production across borders, which complicates the meaning of decoupling.
+    """)
     st.markdown("### Events")
     for year, name, desc in EVENTS:
         st.markdown(f"""
@@ -451,7 +518,7 @@ elif page == "Conclusion":
     """)
 
 elif page == "Sources & Method":
-    hero("Sources & Method", "Data sources used in this project.")
+    hero("Sources & Method", "Data sources, method, and AI use statement.")
     st.markdown("""
     ## Data sources
 
@@ -459,4 +526,5 @@ elif page == "Sources & Method":
     - **Our World in Data CO₂ dataset**: annual CO₂ emissions by country/entity.
     - **Global Carbon Budget 2025**: territorial and consumption-based fossil carbon emissions.
     - **UN World Urbanization Prospects**: urbanization and population estimates.
-    """)
+
+
